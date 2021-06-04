@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]; then
+    echo "Usage: 03_flash path_to_elf_file"  >&2
+    exit 2;
+fi
+
+FIRMWARE_FILE=$@
+
+OPENOCD_SCRIPTS_PATH="/usr/local/Cellar/open-ocd/0.11.0/share/openocd/scripts"
+
+INTERFACE_FILE=$OPENOCD_SCRIPTS_PATH/interface/stlink.cfg
+TARGET_FILE=$OPENOCD_SCRIPTS_PATH/target/stm32f4x.cfg
+
+openocd -f $INTERFACE_FILE -f $TARGET_FILE -c "program $FIRMWARE_FILE verify reset exit"

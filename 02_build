@@ -1,0 +1,1 @@
+make -j4 --directory=cmake-build-debug VERBOSE=1

@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+    {
+        "cwd": "${workspaceRoot}",
+        "executable": "./output/minimal-cpp.elf",
+        "name": "Debug Microcontroller",
+        "request": "launch",
+        "type": "cortex-debug",
+        "servertype": "openocd",
+        "interface": "swd",
+        "device": "STM32F413ZH",
+        "runToMain": true,
+        "configFiles": [
+            "interface/stlink.cfg",
+            "target/stm32f4x.cfg"
+        ],
+        "svdFile": "${workspaceRoot}/BSP/STM32F413.svd",
+        "preRestartCommands": [
+            "file ./output/minimal-cpp.elf",
+            "load",
+            "enable breakpoint",
+            "monitor reset"
+        ]
+    }
+
+    ]
+}
