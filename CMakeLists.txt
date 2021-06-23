@@ -50,6 +50,8 @@ set(APPLICATION_SPECIFIC_FILES
         app/app.hpp
         app/loop.cpp
         app/setup.cpp
+        app/led_controller.cpp
+        app/led_controller.hpp
         )
 
 # Setup output
@@ -93,6 +95,7 @@ target_compile_options(${EXECUTABLE} PRIVATE
         -fno-exceptions
         $<$<COMPILE_LANGUAGE:CXX>:-fno-rtti>
         -Wall
+        -Os
         $<$<CONFIG:Debug>:-Og>
         )
 
@@ -109,7 +112,7 @@ target_link_options(${EXECUTABLE} PRIVATE
         -lnosys
         -fno-exceptions
         -fno-rtti
-        -Wl,-Map=${PROJECT_NAME}.map,--cref
+        -Wl,-Map=${ARTIFACTS_DIR}/${EXECUTABLE_FILENAME}.map,--cref
         -Wl,--gc-sections
         )
 
@@ -118,9 +121,10 @@ add_custom_command(TARGET ${EXECUTABLE}
         POST_BUILD
         COMMAND arm-none-eabi-size "${ARTIFACTS_DIR}/${EXECUTABLE}")
 
-# Create hex file
+# Create hex, bin, lst file
 add_custom_command(TARGET ${EXECUTABLE}
         POST_BUILD
         COMMAND arm-none-eabi-objcopy -O ihex "${ARTIFACTS_DIR}/${EXECUTABLE}" "${ARTIFACTS_DIR}/${EXECUTABLE_FILENAME}.hex"
-        COMMAND arm-none-eabi-objcopy -O binary "${ARTIFACTS_DIR}/${EXECUTABLE}" "${ARTIFACTS_DIR}/${EXECUTABLE_FILENAME}.bin")
-
+        COMMAND arm-none-eabi-objcopy -O binary "${ARTIFACTS_DIR}/${EXECUTABLE}" "${ARTIFACTS_DIR}/${EXECUTABLE_FILENAME}.bin"
+        COMMAND arm-none-eabi-objdump -S "${ARTIFACTS_DIR}/${EXECUTABLE}" >> "${ARTIFACTS_DIR}/${EXECUTABLE_FILENAME}.lst"
+        )

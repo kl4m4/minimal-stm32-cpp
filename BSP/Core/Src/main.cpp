@@ -24,7 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "app.hpp"
-
+#include "led_controller.hpp"
 
 /* USER CODE END Includes */
 
@@ -60,7 +60,15 @@ static void MX_USART6_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+  volatile uint8_t var1 = 0;
+  uint8_t var2 = 0;
+  uint8_t var3 = 0;
+  uint8_t var4 = 3;
+  uint8_t var5 = 4;
+
 /* USER CODE END 0 */
+
+
 
 /**
   * @brief  The application entry point.
@@ -93,7 +101,10 @@ int main(void)
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
   setup();
-  __ASM("nop");
+
+
+  LedController my_controller(LED_INACTIVE);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -103,7 +114,19 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    loop();
+    //loop();
+
+    var1++;var2++;var3++;var4++;var5++;
+
+    if(var1 > 200){
+      if(HAL_GPIO_ReadPin(B_USER_GPIO_Port, B_USER_Pin)){
+        my_controller.MakeActive();
+      }else{
+        my_controller.MakeInactive();
+      }
+    }
+
+
 
   }
   /* USER CODE END 3 */
